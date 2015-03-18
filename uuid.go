@@ -29,6 +29,7 @@ import (
 	"crypto/md5"
 	"crypto/rand"
 	"crypto/sha1"
+	"database/sql/driver"
 	"encoding/binary"
 	"encoding/hex"
 	"fmt"
@@ -262,6 +263,11 @@ func (u *UUID) Scan(src interface{}) error {
 	}
 
 	return fmt.Errorf("uuid: cannot convert %T to UUID", src)
+}
+
+// Value implements the driver.Valuer interface.
+func (u UUID) Value() (driver.Value, error) {
+	return u.String(), nil
 }
 
 // FromBytes returns UUID converted from raw byte slice input.
